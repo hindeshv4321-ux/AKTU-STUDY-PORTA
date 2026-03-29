@@ -3451,11 +3451,7 @@ const builtinData = {
       'Government route: SSC JE, UPPSC JE, GATE for PSU — very important for Civil engineers'
     ]}
   ]};
-// Initialize allData from builtinData
-allData = JSON.parse(JSON.stringify(builtinData));
-allData.adminPyq = {};
-allData.adminTopics = {};
-allData.adminSyllabus = {};
+// Initialize allData from builtinData — NOTE: sem12Syllabus merge neeche hoga, wahan re-init hoga
 
 // ===== FIREBASE HELPERS =====
 async function getPortalData(){
@@ -3542,12 +3538,17 @@ async function saveAdminData(){
     const added=(allData.topics[br][sem]||[]).filter(t=>!builtinT.includes(t.title));
     if(added.length){if(!adminTopics[br])adminTopics[br]={};adminTopics[br][sem]=added;}
   }
-  // Save deletedBuiltin list so deleted built-in items stay deleted after reload
-  await savePortalData({
-    syllabus:adminSyl, pyq:adminPyq, topics:adminTopics,
-    videos:allData.videos, placement:allData.placement,
-    deletedBuiltin: allData.deletedBuiltin||{}
-  });
+  // Use setDoc WITHOUT merge — full overwrite taaki stale data na rahe
+  try{
+    await setDoc(doc(db,'portal','data'),{
+      syllabus:adminSyl,
+      pyq:adminPyq,
+      topics:adminTopics,
+      videos:allData.videos||[],
+      placement:allData.placement||[],
+      deletedBuiltin: allData.deletedBuiltin||{}
+    });
+  }catch(e){ showToast('❌ Save failed: '+e.message,'err'); }
 }
 
 // ===== AUTH =====
@@ -3884,6 +3885,12 @@ builtinData.topics['ECE']['2'] = [
   builtinData.topics[br]['1'] = builtinData.topics['ECE']['1'];
   builtinData.topics[br]['2'] = builtinData.topics['ECE']['2'];
 });
+
+// ✅ allData initialize YAHAN karo — builtinData (sem1/2 including) fully ready hone ke baad
+allData = JSON.parse(JSON.stringify(builtinData));
+allData.adminPyq = {};
+allData.adminTopics = {};
+allData.adminSyllabus = {};
 
 // ===== INIT APP =====
 function initApp(){
