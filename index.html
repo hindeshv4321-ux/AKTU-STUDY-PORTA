@@ -4384,24 +4384,52 @@ async function admAddSubject(){
   });
   units.forEach((u,i)=>u.num=i+1);
 
-  let count=0;
+  // AKTU Rule: CSE ka Sem 1 & 2 non-CSE se swapped hota hai
+  // Non-CSE Sem 1 → CSE Sem 2 bhi, Non-CSE Sem 2 → CSE Sem 1 bhi
+  const CSE_SEM_SWAP = { '1': '2', '2': '1' };
+
+  // Build final list of [branch, sem] pairs to add — including CSE auto-swap
+  const pairs = []; // { br, sem }
   for(const br of selectedBranches){
     for(const sem of selectedSems){
-      if(!allData.syllabus[br]) allData.syllabus[br]={};
-      if(!allData.syllabus[br][sem]) allData.syllabus[br][sem]=[];
-      // Avoid duplicate by code if code given
-      const subjectCode = code || (br.substring(0,1)+'S'+sem+'XX');
-      const exists = code ? allData.syllabus[br][sem].some(s=>s.code===subjectCode) : false;
-      if(!exists){
-        allData.syllabus[br][sem].push({code:subjectCode, name, units:JSON.parse(JSON.stringify(units))});
-        count++;
+      pairs.push({br, sem});
+    }
+  }
+
+  // If any non-CSE branch selected with sem 1 or 2, auto-add to CSE with swapped sem
+  const nonCSESelected = selectedBranches.some(br => br !== 'CSE');
+  const sem12Selected  = selectedSems.filter(s => s === '1' || s === '2');
+
+  if(nonCSESelected && sem12Selected.length > 0){
+    // Only add CSE swap if CSE is NOT already manually selected (avoid double-adding)
+    const cseAlreadySelected = selectedBranches.includes('CSE');
+    sem12Selected.forEach(sem => {
+      const swappedSem = CSE_SEM_SWAP[sem];
+      // Check if this swapped CSE entry is already in pairs
+      const alreadyIn = pairs.some(p => p.br === 'CSE' && p.sem === swappedSem);
+      if(!cseAlreadySelected && !alreadyIn){
+        pairs.push({ br: 'CSE', sem: swappedSem, autoSwapped: true });
       }
+    });
+  }
+
+  let count = 0, cseSwapCount = 0;
+  for(const {br, sem, autoSwapped} of pairs){
+    if(!allData.syllabus[br]) allData.syllabus[br]={};
+    if(!allData.syllabus[br][sem]) allData.syllabus[br][sem]=[];
+    const subjectCode = code || (br.substring(0,1)+'S'+sem+'XX');
+    const exists = code ? allData.syllabus[br][sem].some(s=>s.code===subjectCode) : false;
+    if(!exists){
+      allData.syllabus[br][sem].push({code:subjectCode, name, units:JSON.parse(JSON.stringify(units))});
+      count++;
+      if(autoSwapped) cseSwapCount++;
     }
   }
 
   await saveAdminData(); renderAdminTables(); renderSyllabus();
   ['as-code','as-name','as-units'].forEach(id=>document.getElementById(id).value='');
-  showToast(`✅ Subject added to ${count} branch-sem combination${count>1?'s':''}!`);
+  const swapMsg = cseSwapCount > 0 ? ` (+ CSE Sem ${sem12Selected.map(s=>CSE_SEM_SWAP[s]).join('/')} auto-added)` : '';
+  showToast(`✅ Subject added to ${count} combination${count>1?'s':''}${swapMsg}!`);
 }
 
 // Toggle all branches
