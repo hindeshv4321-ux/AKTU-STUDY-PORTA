@@ -3,14 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#e11d48">
+<meta name="theme-color" content="#f5f6fa">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="AKTU Portal">
-<meta name="description" content="AKTU B.Tech Study Portal — Syllabus, PYQs, Placement, Notes aur bahut kuch">
-<link rel="manifest" href="manifest.json">
-<!-- Apple Touch Icons -->
-<link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>AKTU Study Portal | Developed by Hindesh Verma</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 
@@ -1686,9 +1680,65 @@ input.note-title-inp:focus{border-color:var(--a3)}
   #main{padding:12px 10px 90px}
   .lp-hero{padding:50px 5% 40px}
 }
+
+/* ═══════════════════════════════════════════════
+   PREMIUM EFFECTS — Cursor Glow + Magnetic + 3D Tilt
+   Added by Claude
+═══════════════════════════════════════════════ */
+
+/* 1. CURSOR GLOW */
+#cursor-glow{
+  position:fixed;
+  width:320px;height:320px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(225,29,72,0.13) 0%, rgba(251,113,133,0.06) 40%, transparent 70%);
+  pointer-events:none;
+  z-index:9997;
+  transform:translate(-50%,-50%);
+  transition:opacity .4s ease;
+  opacity:0;
+  filter:blur(2px);
+}
+body:hover #cursor-glow{ opacity:1; }
+
+/* 2. MAGNETIC BUTTONS — no extra CSS needed, JS handles transform */
+
+/* 3. 3D TILT CARDS */
+.info-card{
+  transform-style: preserve-3d;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+}
+.info-card .ic-code,
+.info-card h3,
+.info-card p,
+.info-card .tags{
+  transform: translateZ(18px);
+  position:relative;
+}
+
+/* Tilt shimmer overlay */
+.info-card::after{
+  content:'';
+  position:absolute;inset:0;
+  border-radius:inherit;
+  background:linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  opacity:0;
+  transition:opacity .2s;
+  pointer-events:none;
+}
+.info-card:hover::after{ opacity:1; }
+
+/* Landing page feat cards also get tilt */
+.lp-feat-card{
+  transform-style: preserve-3d;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease !important;
+}
 </style>
 </head>
 <body>
+
+<!-- CURSOR GLOW ELEMENT -->
+<div id="cursor-glow"></div>
 
 <!-- ═══ LOADING SCREEN ═══ -->
 <div id="loading-screen">
@@ -4629,91 +4679,159 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(lp && lp.style.display !== 'none') toggleLandingDecorations(true);
 });
 
-// ── PWA SERVICE WORKER REGISTRATION ────────────
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(reg => {
-        console.log('✅ Service Worker registered:', reg.scope);
-        // Check for updates every time page loads
-        reg.update();
-      })
-      .catch(err => console.warn('SW registration failed:', err));
+// ══════════════════════════════════════════════
+// EFFECT 1 — CURSOR GLOW TRAIL
+// ══════════════════════════════════════════════
+(function(){
+  const glow = document.getElementById('cursor-glow');
+  if(!glow) return;
+  let mx = 0, my = 0, cx = 0, cy = 0;
+  let raf;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+  }, { passive: true });
+
+  // Hide on mobile (no cursor)
+  if(window.matchMedia('(hover:none)').matches){
+    glow.style.display = 'none';
+    return;
+  }
+
+  function animate(){
+    // Smooth lag — glow follows cursor with slight delay
+    cx += (mx - cx) * 0.1;
+    cy += (my - cy) * 0.1;
+    glow.style.left = cx + 'px';
+    glow.style.top  = cy + 'px';
+    raf = requestAnimationFrame(animate);
+  }
+  animate();
+
+  // Grow glow on hovering clickable elements
+  document.addEventListener('mouseover', e => {
+    const t = e.target.closest('button, a, .info-card, .lp-feat-card, .b-card, .nav-item');
+    if(t){
+      glow.style.width  = '420px';
+      glow.style.height = '420px';
+    } else {
+      glow.style.width  = '320px';
+      glow.style.height = '320px';
+    }
   });
-}
+})();
 
-// ── PWA INSTALL PROMPT ──────────────────────────
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  // Show install banner after 3 seconds if not already installed
-  setTimeout(() => {
-    if (deferredPrompt) showInstallBanner();
-  }, 3000);
-});
+// ══════════════════════════════════════════════
+// EFFECT 2 — MAGNETIC BUTTONS
+// ══════════════════════════════════════════════
+(function(){
+  const SELECTORS = '.btn-hero-primary, .btn-hero-outline, .btn-cta-main, .lp-nav-btn';
+  const STRENGTH  = 0.35; // how strongly they pull (0 = none, 1 = full)
 
-function showInstallBanner() {
-  if (document.getElementById('pwa-banner')) return;
-  const banner = document.createElement('div');
-  banner.id = 'pwa-banner';
-  banner.innerHTML = `
-    <div style="
-      position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
-      background:#fff;border:1.5px solid rgba(225,29,72,0.25);
-      border-radius:16px;padding:14px 18px;
-      box-shadow:0 8px 32px rgba(225,29,72,0.2);
-      display:flex;align-items:center;gap:12px;
-      z-index:9998;max-width:340px;width:90%;
-      font-family:'Plus Jakarta Sans',sans-serif;
-      animation:slideUp .4s ease;
-    ">
-      <div style="font-size:1.8rem;flex-shrink:0">📲</div>
-      <div style="flex:1">
-        <div style="font-size:.88rem;font-weight:700;color:#1a0810">App Install Karo!</div>
-        <div style="font-size:.75rem;color:#6b3040;margin-top:2px">AKTU Portal ko phone pe install karo — offline bhi chalega</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
-        <button onclick="installPWA()" style="
-          background:linear-gradient(135deg,#e11d48,#be123c);
-          border:none;border-radius:8px;padding:7px 14px;
-          color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;
-          font-family:inherit;
-        ">Install</button>
-        <button onclick="dismissBanner()" style="
-          background:none;border:1px solid rgba(225,29,72,0.2);
-          border-radius:8px;padding:5px 14px;
-          color:#9f1239;font-size:.75rem;cursor:pointer;
-          font-family:inherit;
-        ">Baad mein</button>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(banner);
-}
+  function attachMagnet(btn){
+    btn.addEventListener('mousemove', e => {
+      const r   = btn.getBoundingClientRect();
+      const x   = e.clientX - r.left - r.width  / 2;
+      const y   = e.clientY - r.top  - r.height / 2;
+      btn.style.transform   = `translate(${x * STRENGTH}px, ${y * STRENGTH}px) scale(1.04)`;
+      btn.style.boxShadow   = `${-x * 0.04}px ${-y * 0.06}px 28px rgba(225,29,72,0.35)`;
+      btn.style.transition  = 'transform 0.1s ease, box-shadow 0.1s ease';
+    });
 
-window.installPWA = async function() {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const { outcome } = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  dismissBanner();
-  if (outcome === 'accepted') showToast('🎉 App install ho rahi hai!');
-};
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform  = 'translate(0,0) scale(1)';
+      btn.style.boxShadow  = '';
+      btn.style.transition = 'transform 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.4s ease';
+    });
 
-window.dismissBanner = function() {
-  const b = document.getElementById('pwa-banner');
-  if (b) b.remove();
-};
+    btn.addEventListener('mousedown', () => {
+      btn.style.transform = 'translate(0,0) scale(0.97)';
+    });
+    btn.addEventListener('mouseup', () => {
+      btn.style.transform = 'translate(0,0) scale(1.04)';
+    });
+  }
 
-window.addEventListener('appinstalled', () => {
-  showToast('✅ AKTU Portal install ho gaya!');
-  deferredPrompt = null;
-});
+  // Attach now + re-attach after any dynamic render
+  function init(){
+    document.querySelectorAll(SELECTORS).forEach(attachMagnet);
+  }
+  init();
+  // Re-run after page transitions
+  setTimeout(init, 1500);
+  setTimeout(init, 3000);
+})();
+
+// ══════════════════════════════════════════════
+// EFFECT 3 — 3D TILT CARDS
+// ══════════════════════════════════════════════
+(function(){
+  const TILT_SELECTORS = '.info-card, .lp-feat-card';
+  const MAX_TILT = 12; // degrees
+  const SCALE    = 1.04;
+
+  function attachTilt(card){
+    card.style.transformStyle = 'preserve-3d';
+    card.style.willChange     = 'transform';
+
+    card.addEventListener('mousemove', e => {
+      const r  = card.getBoundingClientRect();
+      const x  = (e.clientX - r.left) / r.width  - 0.5;  // -0.5 to 0.5
+      const y  = (e.clientY - r.top)  / r.height - 0.5;
+      const rx = -y * MAX_TILT;   // rotate around X axis
+      const ry =  x * MAX_TILT;   // rotate around Y axis
+
+      card.style.transform  = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${SCALE})`;
+      card.style.boxShadow  = `${-ry * 1.5}px ${rx * 1.5}px 32px rgba(225,29,72,0.22)`;
+      card.style.transition = 'transform 0.08s ease, box-shadow 0.08s ease';
+      card.style.zIndex     = '2';
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform  = 'perspective(700px) rotateX(0) rotateY(0) scale(1)';
+      card.style.boxShadow  = '';
+      card.style.transition = 'transform 0.5s cubic-bezier(.4,0,.2,1), box-shadow 0.5s ease';
+      card.style.zIndex     = '';
+    });
+
+    // Click bounce
+    card.addEventListener('mousedown', () => {
+      card.style.transform  = 'perspective(700px) rotateX(0) rotateY(0) scale(0.97)';
+      card.style.transition = 'transform 0.1s ease';
+    });
+    card.addEventListener('mouseup', e => {
+      const r  = card.getBoundingClientRect();
+      const x  = (e.clientX - r.left) / r.width  - 0.5;
+      const y  = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.transform  = `perspective(700px) rotateX(${-y*MAX_TILT}deg) rotateY(${x*MAX_TILT}deg) scale(${SCALE})`;
+      card.style.transition = 'transform 0.15s ease';
+    });
+  }
+
+  function init(){
+    document.querySelectorAll(TILT_SELECTORS).forEach(card => {
+      if(!card.dataset.tiltAttached){
+        attachTilt(card);
+        card.dataset.tiltAttached = '1';
+      }
+    });
+  }
+
+  // Run on DOM ready + after dynamic content loads
+  init();
+  setTimeout(init, 800);
+  setTimeout(init, 2000);
+  setTimeout(init, 4000);
+
+  // Also run whenever showPage is called (new cards render)
+  const _origShowPage = window.showPage;
+  window.showPage = function(){
+    if(_origShowPage) _origShowPage.apply(this, arguments);
+    setTimeout(init, 300);
+  };
+})();
 
 </script>
-<style>
-@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-</style>
 </body>
 </html>
