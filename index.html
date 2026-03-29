@@ -59,6 +59,21 @@
   --shadow-lg: 0 16px 48px rgba(225,29,72,0.25);
 }
 
+/* ── CHECKBOX PILLS for multi-select ── */
+.cb-pill{display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+.cb-pill input[type=checkbox]{display:none}
+.cb-pill span{
+  padding:5px 13px;border-radius:99px;font-size:.78rem;font-weight:600;
+  border:1.5px solid var(--border2);color:var(--text2);background:#fff;
+  transition:all .18s ease;display:inline-block;
+}
+.cb-pill input[type=checkbox]:checked + span{
+  background:linear-gradient(135deg,#e11d48,#fb7185);
+  border-color:transparent;color:#fff;
+  box-shadow:0 3px 10px rgba(225,29,72,0.35);
+}
+.cb-pill:hover span{border-color:var(--a1);color:var(--a1)}
+
 /* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -710,46 +725,46 @@ body::after{
 
 /* Branch cards — UC style */
 .b-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:4px}
-@media(max-width:640px){.b-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.b-grid{grid-template-columns:1fr;gap:12px}}
 @media(max-width:380px){.b-grid{grid-template-columns:1fr}}
 .b-card{
-  border-radius:18px;padding:24px 20px 18px;cursor:pointer;
+  border-radius:18px;padding:20px 18px 16px;cursor:pointer;
   transition:all .22s cubic-bezier(.4,0,.2,1);text-align:left;
-  position:relative;overflow:hidden;min-height:200px;
+  position:relative;overflow:hidden;
   display:flex;flex-direction:column;justify-content:space-between;
 }
 .b-card:hover{transform:translateY(-5px);box-shadow:0 20px 48px rgba(0,0,0,0.18)}
 .b-card-badge{
-  position:absolute;top:14px;right:14px;
-  font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:99px;
-  color:#fff;
+  position:absolute;top:12px;right:12px;
+  font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:99px;
+  color:#fff;white-space:nowrap;
 }
-.b-card-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.b-card-top{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .b-card-icon{
-  width:48px;height:48px;border-radius:14px;
+  width:46px;height:46px;border-radius:13px;flex-shrink:0;
   background:rgba(255,255,255,0.18);backdrop-filter:blur(8px);
-  display:flex;align-items:center;justify-content:center;font-size:1.5rem;
-  border:1px solid rgba(255,255,255,0.25);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+  border:1px solid rgba(255,255,255,0.25);
 }
-.b-card h3{font-size:1.05rem;font-weight:800;color:#fff;line-height:1.2}
-.b-card .b-card-meta{font-size:.72rem;color:rgba(255,255,255,0.65);margin-top:2px}
+.b-card h3{font-size:1rem;font-weight:800;color:#fff;line-height:1.22;word-break:break-word}
+.b-card .b-card-meta{font-size:.7rem;color:rgba(255,255,255,0.65);margin-top:2px}
 .b-card .b-card-desc{
-  font-size:.8rem;color:rgba(255,255,255,0.75);line-height:1.55;
+  font-size:.8rem;color:rgba(255,255,255,0.8);line-height:1.55;
   margin-bottom:14px;flex:1;
 }
-.b-card-footer{display:flex;align-items:center;justify-content:space-between}
+.b-card-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .b-card-level{
   display:inline-flex;align-items:center;gap:5px;
-  font-size:.72rem;font-weight:600;padding:4px 10px;
+  font-size:.7rem;font-weight:600;padding:4px 10px;
   border-radius:99px;background:rgba(255,255,255,0.15);
-  color:rgba(255,255,255,0.9);
+  color:rgba(255,255,255,0.9);white-space:nowrap;
 }
 .b-card-btn{
   display:flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);
-  border-radius:99px;padding:7px 16px;color:#fff;
+  background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);
+  border-radius:99px;padding:7px 14px;color:#fff;
   font-size:.78rem;font-weight:700;font-family:var(--ff);cursor:pointer;
-  backdrop-filter:blur(8px);transition:all .18s;
+  backdrop-filter:blur(8px);transition:all .18s;white-space:nowrap;
 }
 .b-card-btn:hover{background:rgba(255,255,255,0.28)}
 .b-card-btn svg{width:14px;height:14px}
@@ -1224,12 +1239,12 @@ input.note-title-inp:focus{border-color:var(--a3)}
 .fg{display:flex;flex-direction:column;gap:4px;margin-bottom:9px}
 .fg label{font-size:.72rem;color:var(--text2);font-weight:600;letter-spacing:.4px;text-transform:uppercase}
 .fg input,.fg select,.fg textarea{
-  background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.18);border-radius:9px;
-  padding:9px 12px;color:var(--text);font-family:var(--ff);font-size:.83rem;
+  background:#fff;border:1px solid rgba(225,29,72,0.18);border-radius:9px;
+  padding:9px 12px;color:#1a0810;font-family:var(--ff);font-size:.83rem;
   outline:none;transition:all var(--t);width:100%;
 }
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--a2);box-shadow:0 0 0 2px rgba(192,132,252,0.25)}
-.fg select option{background:#2d0060}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--a1);box-shadow:0 0 0 2px rgba(225,29,72,0.12)}
+.fg select option{background:#fff;color:#1a0810}
 .fg textarea{resize:vertical;min-height:65px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .btn-add{
@@ -1244,6 +1259,8 @@ input.note-title-inp:focus{border-color:var(--a3)}
 .dtbl td{padding:8px 11px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}
 .dtbl tr:hover td{background:rgba(255,255,255,0.02)}
 .del-btn{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.18);border-radius:6px;padding:3px 8px;color:#f87171;font-size:.72rem;cursor:pointer;font-family:var(--ff);transition:all var(--t)}
+.del-btn-builtin{background:rgba(217,119,6,0.08);border:1px solid rgba(217,119,6,0.25);color:#d97706;font-size:.68rem}
+.del-btn-builtin:hover{background:rgba(217,119,6,0.18);color:#b45309}
 .del-btn:hover{background:rgba(239,68,68,0.18)}
 .chip{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.72rem;font-weight:600}
 .chip.g{background:rgba(16,185,129,0.1);color:var(--a4)}
@@ -1631,9 +1648,9 @@ input.note-title-inp:focus{border-color:var(--a3)}
 @media(max-width:768px){
   #sidebar{transform:translateX(-100%)}
   #sidebar.open{transform:translateX(0);box-shadow:8px 0 48px rgba(0,0,0,0.22)}
-  #main{margin-left:0;padding:14px 12px 96px}
+  #main{margin-left:0;padding:14px 14px 96px}
   .hamburger{display:flex}
-  .b-grid{grid-template-columns:1fr 1fr}
+  .b-grid{grid-template-columns:1fr}
   .att-wrap{grid-template-columns:1fr}
   .frow,.frow2{grid-template-columns:1fr}
   .cards-grid,.pyq-ygrid{grid-template-columns:1fr}
@@ -1661,6 +1678,18 @@ input.note-title-inp:focus{border-color:var(--a3)}
   .sel-box{padding:22px 16px;border-radius:18px}
   .adm-tabs{gap:5px}
   .adm-tab{padding:6px 10px;font-size:.75rem}
+  /* Mobile branch cards — horizontal layout */
+  .b-card{flex-direction:row;align-items:center;padding:16px;min-height:unset;gap:14px;border-radius:16px}
+  .b-card-badge{top:10px;right:10px;font-size:.65rem;padding:2px 8px}
+  .b-card-top{margin-bottom:0;flex-shrink:0;flex-direction:column;align-items:center;gap:6px;width:60px}
+  .b-card-icon{width:44px;height:44px;font-size:1.3rem}
+  .b-card h3{font-size:.82rem;text-align:center;line-height:1.2}
+  .b-card .b-card-meta{display:none}
+  .b-card-body{flex:1;display:flex;flex-direction:column;gap:6px;padding-top:4px}
+  .b-card .b-card-desc{font-size:.78rem;margin-bottom:0;line-height:1.45}
+  .b-card-footer{flex-wrap:nowrap}
+  .b-card-level{font-size:.65rem;padding:3px 8px}
+  .b-card-btn{font-size:.72rem;padding:5px 12px}
 }
 @media(max-width:480px){
   .stat-grid{grid-template-columns:repeat(2,1fr)}
@@ -1674,11 +1703,13 @@ input.note-title-inp:focus{border-color:var(--a3)}
   .rv-filter-btn{padding:5px 11px;font-size:.73rem}
 }
 @media(max-width:380px){
-  .b-grid{grid-template-columns:1fr 1fr}
+  .b-grid{grid-template-columns:1fr;gap:10px}
   .yr-grid,.sm-grid{grid-template-columns:repeat(2,1fr)}
   .stat-grid{grid-template-columns:repeat(2,1fr)}
   #main{padding:12px 10px 90px}
   .lp-hero{padding:50px 5% 40px}
+  .b-card{padding:12px}
+  .b-card-icon{width:38px;height:38px;font-size:1.1rem}
 }
 
 /* ═══════════════════════════════════════════════
@@ -2518,19 +2549,47 @@ body:hover #cursor-glow{ opacity:1; }
       </div>
       <div class="adm-sec" id="adm-syl">
         <div class="adm-box">
-          <h3>📚 Add Subject</h3>
-          <div class="frow">
-            <div class="fg"><label>Branch</label><select id="as-br"><option>ECE</option><option>ME</option><option>EE</option><option>CSE</option><option>Civil</option></select></div>
-            <div class="fg"><label>Sem</label><select id="as-sem"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option></select></div>
+          <h3>📚 Add Subject <span class="chip" style="background:rgba(225,29,72,0.12);color:#e11d48;font-size:.7rem">Multi-branch/sem support</span></h3>
+          <div class="frow" style="align-items:flex-start;gap:16px">
+            <div class="fg" style="flex:1">
+              <label style="display:flex;align-items:center;justify-content:space-between">
+                Branches
+                <span style="font-size:.7rem;color:var(--a1);cursor:pointer;font-weight:600" onclick="toggleAllBr()">Select All</span>
+              </label>
+              <div id="as-br-wrap" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;padding:10px;background:rgba(225,29,72,0.04);border:1px solid var(--border);border-radius:10px">
+                <label class="cb-pill"><input type="checkbox" name="as-br" value="ECE" checked><span>ECE</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-br" value="ME"><span>ME</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-br" value="EE"><span>EE</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-br" value="CSE"><span>CSE</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-br" value="Civil"><span>Civil</span></label>
+              </div>
+            </div>
+            <div class="fg" style="flex:1">
+              <label style="display:flex;align-items:center;justify-content:space-between">
+                Semesters
+                <span style="font-size:.7rem;color:var(--a1);cursor:pointer;font-weight:600" onclick="toggleAllSem()">Select All</span>
+              </label>
+              <div id="as-sem-wrap" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;padding:10px;background:rgba(225,29,72,0.04);border:1px solid var(--border);border-radius:10px">
+                <label class="cb-pill"><input type="checkbox" name="as-sem" value="1"><span>Sem 1</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-sem" value="2"><span>Sem 2</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-sem" value="3"><span>Sem 3</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-sem" value="4" checked><span>Sem 4</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-sem" value="5"><span>Sem 5</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-sem" value="6"><span>Sem 6</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-sem" value="7"><span>Sem 7</span></label>
+                <label class="cb-pill"><input type="checkbox" name="as-sem" value="8"><span>Sem 8</span></label>
+              </div>
+            </div>
           </div>
-          <div class="frow">
-            <div class="fg"><label>Subject Code</label><input id="as-code" placeholder="e.g. BEC401"/></div>
-            <div class="fg"><label>Subject Name</label><input id="as-name" placeholder="e.g. Communication Engg"/></div>
+          <div id="as-bulk-preview" style="display:none;margin-top:8px;padding:8px 12px;background:rgba(225,29,72,0.07);border-radius:8px;font-size:.78rem;color:#e11d48;font-weight:600"></div>
+          <div class="frow" style="margin-top:12px">
+            <div class="fg"><label>Subject Code</label><input id="as-code" placeholder="e.g. BAS101 (or leave blank for same code in all)"/></div>
+            <div class="fg"><label>Subject Name</label><input id="as-name" placeholder="e.g. Engineering Mathematics-I"/></div>
           </div>
           <div class="fg"><label>Units (one per line: Unit 1: Title | topic1, topic2)</label><textarea id="as-units" placeholder="Unit 1: AM Modulation | DSB, SSB, FM, PM&#10;Unit 2: Noise | SNR, FOM, AWGN"></textarea></div>
-          <button class="btn-add" onclick="admAddSubject()">➕ Add Subject</button>
+          <button class="btn-add" onclick="admAddSubject()">➕ Add to Selected Branches & Semesters</button>
         </div>
-        <div class="adm-box"><h3>📋 Subjects <span class="chip bi">Built-in = can't delete</span></h3><table class="dtbl"><thead><tr><th>Branch</th><th>Sem</th><th>Code</th><th>Name</th><th>Units</th><th>Del</th></tr></thead><tbody id="subj-tbl"></tbody></table></div>
+        <div class="adm-box"><h3>📋 Subjects</h3><div style="font-size:.75rem;color:#b45309;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:8px 12px;margin-bottom:10px">⚠️ Built-in subjects delete karne par woh portal se hata jayenge. Firebase mein save hoga.</div><table class="dtbl"><thead><tr><th>Branch</th><th>Sem</th><th>Code</th><th>Name</th><th>Units</th><th>Del</th></tr></thead><tbody id="subj-tbl"></tbody></table></div>
       </div>
       <div class="adm-sec" id="adm-pyq">
         <div class="adm-box">
@@ -2568,7 +2627,7 @@ body:hover #cursor-glow{ opacity:1; }
           <div class="fg"><label>Content / Formula / Solution</label><textarea id="at-sol" style="min-height:100px" placeholder="Formulas, steps, tricks..."></textarea></div>
           <button class="btn-add" onclick="admAddTopic()">➕ Add Topic</button>
         </div>
-        <div class="adm-box"><h3>📋 Topics <span class="chip bi">Built-in = can't delete</span></h3><table class="dtbl"><thead><tr><th>Branch</th><th>Sem</th><th>Code</th><th>Topic</th><th>Del</th></tr></thead><tbody id="top-tbl"></tbody></table></div>
+        <div class="adm-box"><h3>📋 Topics</h3><div style="font-size:.75rem;color:#b45309;background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:8px 12px;margin-bottom:10px">⚠️ Built-in topics bhi delete ho sakte hain — Firebase mein save hoga.</div><table class="dtbl"><thead><tr><th>Branch</th><th>Sem</th><th>Code</th><th>Topic</th><th>Del</th></tr></thead><tbody id="top-tbl"></tbody></table></div>
       </div>
       <div class="adm-sec" id="adm-pl">
         <div class="adm-box">
@@ -3418,12 +3477,34 @@ async function getAllUsers(){
 async function loadPortalData(){
   const stored = await getPortalData();
   if(!stored) return;
+
+  // Load deletedBuiltin first
+  if(stored.deletedBuiltin) allData.deletedBuiltin = stored.deletedBuiltin;
+  const delSyl  = new Set(allData.deletedBuiltin?.syllabus||[]);
+  const delPyq  = new Set(allData.deletedBuiltin?.pyq||[]);
+  const delTop  = new Set(allData.deletedBuiltin?.topics||[]);
+
+  // Remove deleted built-in subjects from allData
+  for(const br in allData.syllabus) for(const sem in allData.syllabus[br]){
+    allData.syllabus[br][sem] = (allData.syllabus[br][sem]||[]).filter(s=>!delSyl.has(`${br}|${sem}|${s.code}`));
+  }
+  // Remove deleted built-in PYQ years
+  for(const br in allData.pyq) for(const sem in allData.pyq[br]) for(const code in allData.pyq[br][sem]){
+    for(const yr of Object.keys(allData.pyq[br][sem][code].years||{})){
+      if(delPyq.has(`${br}|${sem}|${code}|${yr}`)) delete allData.pyq[br][sem][code].years[yr];
+    }
+  }
+  // Remove deleted built-in topics
+  for(const br in allData.topics) for(const sem in allData.topics[br]){
+    allData.topics[br][sem]=(allData.topics[br][sem]||[]).filter(t=>!delTop.has(`${br}|${sem}|${t.title}`));
+  }
+
   // Merge admin-added syllabus
   if(stored.syllabus) for(const br in stored.syllabus) for(const sem in stored.syllabus[br]){
     if(!allData.syllabus[br]) allData.syllabus[br]={};
     if(!allData.syllabus[br][sem]) allData.syllabus[br][sem]=[];
-    const builtin = allData.syllabus[br][sem].map(s=>s.code);
-    (stored.syllabus[br][sem]||[]).forEach(s=>{ if(!builtin.includes(s.code)) allData.syllabus[br][sem].push(s); });
+    const existing = allData.syllabus[br][sem].map(s=>s.code);
+    (stored.syllabus[br][sem]||[]).forEach(s=>{ if(!existing.includes(s.code)) allData.syllabus[br][sem].push(s); });
   }
   // Merge admin pyq
   if(stored.pyq) for(const br in stored.pyq) for(const sem in stored.pyq[br]){
@@ -3435,15 +3516,15 @@ async function loadPortalData(){
   if(stored.topics) for(const br in stored.topics) for(const sem in stored.topics[br]){
     if(!allData.topics[br]) allData.topics[br]={};
     if(!allData.topics[br][sem]) allData.topics[br][sem]=[];
-    const builtin = allData.topics[br][sem].map(t=>t.title);
-    (stored.topics[br][sem]||[]).forEach(t=>{ if(!builtin.includes(t.title)) allData.topics[br][sem].push(t); });
+    const existing = allData.topics[br][sem].map(t=>t.title);
+    (stored.topics[br][sem]||[]).forEach(t=>{ if(!existing.includes(t.title)) allData.topics[br][sem].push(t); });
   }
   if(stored.videos) allData.videos = stored.videos;
   if(stored.placement) allData.placement = stored.placement;
 }
 
 async function saveAdminData(){
-  // Only save admin-added data
+  // Only save admin-added data (non-builtin)
   const adminSyl={}, adminPyq={}, adminTopics={};
   for(const br in allData.syllabus) for(const sem in allData.syllabus[br]){
     const builtin=(builtinData.syllabus[br]?.[sem]||[]).map(s=>s.code);
@@ -3461,7 +3542,12 @@ async function saveAdminData(){
     const added=(allData.topics[br][sem]||[]).filter(t=>!builtinT.includes(t.title));
     if(added.length){if(!adminTopics[br])adminTopics[br]={};adminTopics[br][sem]=added;}
   }
-  await savePortalData({syllabus:adminSyl,pyq:adminPyq,topics:adminTopics,videos:allData.videos,placement:allData.placement});
+  // Save deletedBuiltin list so deleted built-in items stay deleted after reload
+  await savePortalData({
+    syllabus:adminSyl, pyq:adminPyq, topics:adminTopics,
+    videos:allData.videos, placement:allData.placement,
+    deletedBuiltin: allData.deletedBuiltin||{}
+  });
 }
 
 // ===== AUTH =====
@@ -3537,21 +3623,21 @@ function showSelector(){
     <div class="b-card" onclick="selectBranch('${b.id}')"
       style="background:linear-gradient(145deg,${b.c},${b.c2});box-shadow:0 8px 32px ${b.c}40">
       <div class="b-card-badge" style="background:${b.badgeClr}">${b.badge}</div>
-      <div>
-        <div class="b-card-top">
-          <div class="b-card-icon">${b.icon}</div>
-          <div>
-            <h3>${b.name}</h3>
-            <div class="b-card-meta">⏱ ${b.meta}</div>
-          </div>
+      <div class="b-card-top">
+        <div class="b-card-icon">${b.icon}</div>
+        <div>
+          <h3>${b.name}</h3>
+          <div class="b-card-meta">⏱ ${b.meta}</div>
         </div>
-        <div class="b-card-desc">${b.desc}</div>
       </div>
-      <div class="b-card-footer">
-        <span class="b-card-level">● ${b.level}</span>
-        <button class="b-card-btn">Start Learning
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        </button>
+      <div class="b-card-body">
+        <div class="b-card-desc">${b.desc}</div>
+        <div class="b-card-footer">
+          <span class="b-card-level">● ${b.level}</span>
+          <button class="b-card-btn">Start
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </button>
+        </div>
       </div>
     </div>`).join('');
 }
@@ -4181,31 +4267,71 @@ function renderAdminOverview(){
 }
 
 function renderAdminTables(){
-  // Subjects
+  const brChip=br=>`<span class="chip ${br==='ECE'?'p':br==='ME'?'o':br==='EE'?'b':br==='CSE'?'g':'y'}">${br}</span>`;
+  const delBtn=(fn,args,isBuiltin)=>`<button class="del-btn${isBuiltin?' del-btn-builtin':''}" onclick="${fn}(${args})" title="${isBuiltin?'Built-in subject — delete karega permanently':'Delete'}">${isBuiltin?'🗑️ Built-in':'Del'}</button>`;
+
+  // Subjects — show ALL (builtin + custom), del button for all
   const st=document.getElementById('subj-tbl');
   if(st){
     let rows='';
+    // Collect all subjects from both builtinData and allData (merged view)
+    const seen=new Set();
+    // First iterate allData.syllabus (already has builtin merged in via loadData)
     for(const br in allData.syllabus) for(const sem in allData.syllabus[br]){
       (allData.syllabus[br][sem]||[]).forEach(s=>{
+        const key=`${br}|${sem}|${s.code}`;
+        if(seen.has(key)) return; seen.add(key);
         const isBuiltin=(builtinData.syllabus[br]?.[sem]||[]).some(b=>b.code===s.code);
-        rows+=`<tr><td><span class="chip ${br==='ECE'?'p':br==='ME'?'o':br==='EE'?'b':br==='CSE'?'g':'y'}">${br}</span></td><td>${sem}</td><td>${s.code}</td><td>${s.name}</td><td>${(s.units||[]).length}</td><td>${isBuiltin?'<span class="chip bi">Built-in</span>':`<button class="del-btn" onclick="admDelSubject('${br}','${sem}','${s.code}')">Del</button>`}</td></tr>`;
+        const isDeleted=(allData.deletedBuiltin?.syllabus||[]).includes(key);
+        if(isDeleted) return; // already deleted, skip
+        rows+=`<tr style="${isBuiltin?'background:rgba(225,29,72,0.03)':''}">
+          <td>${brChip(br)}</td><td>${sem}</td><td><code style="font-size:.72rem">${s.code}</code></td>
+          <td>${s.name}${isBuiltin?'<span class="chip bi" style="margin-left:6px;font-size:.65rem">built-in</span>':''}</td>
+          <td>${(s.units||[]).length}</td>
+          <td>${delBtn(`admDelSubject`,`'${br}','${sem}','${s.code}'`,isBuiltin)}</td>
+        </tr>`;
+      });
+    }
+    // Also show builtin subjects not yet in allData (edge case)
+    for(const br in builtinData.syllabus) for(const sem in builtinData.syllabus[br]){
+      (builtinData.syllabus[br][sem]||[]).forEach(s=>{
+        const key=`${br}|${sem}|${s.code}`;
+        if(seen.has(key)) return; seen.add(key);
+        const isDeleted=(allData.deletedBuiltin?.syllabus||[]).includes(key);
+        if(isDeleted) return;
+        rows+=`<tr style="background:rgba(225,29,72,0.03)">
+          <td>${brChip(br)}</td><td>${sem}</td><td><code style="font-size:.72rem">${s.code}</code></td>
+          <td>${s.name}<span class="chip bi" style="margin-left:6px;font-size:.65rem">built-in</span></td>
+          <td>${(s.units||[]).length}</td>
+          <td>${delBtn(`admDelSubject`,`'${br}','${sem}','${s.code}'`,true)}</td>
+        </tr>`;
       });
     }
     st.innerHTML=rows||noRow(6);
   }
+
   // PYQ
   const pt=document.getElementById('pyq-tbl');
   if(pt){
     let rows='';
+    const seen2=new Set();
     for(const br in allData.pyq) for(const sem in allData.pyq[br]) for(const code in allData.pyq[br][sem]){
       const isBuiltin=!!(builtinData.pyq[br]?.[sem]?.[code]);
       const yrs=Object.keys(allData.pyq[br][sem][code].years||{});
       yrs.forEach(yr=>{
-        rows+=`<tr><td><span class="chip p">${br}</span></td><td>${sem}</td><td>${code}</td><td>${yr}</td><td>${isBuiltin?'<span class="chip bi">Built-in</span>':`<button class="del-btn" onclick="admDelPYQ('${br}','${sem}','${code}','${yr}')">Del</button>`}</td></tr>`;
+        const key=`${br}|${sem}|${code}|${yr}`;
+        if(seen2.has(key)) return; seen2.add(key);
+        const isDeleted=(allData.deletedBuiltin?.pyq||[]).includes(key);
+        if(isDeleted) return;
+        rows+=`<tr style="${isBuiltin?'background:rgba(225,29,72,0.03)':''}">
+          <td>${brChip(br)}</td><td>${sem}</td><td>${code}</td><td>${yr}</td>
+          <td>${delBtn(`admDelPYQ`,`'${br}','${sem}','${code}','${yr}'`,isBuiltin)}</td>
+        </tr>`;
       });
     }
     pt.innerHTML=rows||noRow(5);
   }
+
   // Topics
   const tt=document.getElementById('top-tbl');
   if(tt){
@@ -4213,26 +4339,43 @@ function renderAdminTables(){
     for(const br in allData.topics) for(const sem in allData.topics[br]){
       (allData.topics[br][sem]||[]).forEach((t,i)=>{
         const isBuiltin=(builtinData.topics[br]?.[sem]||[]).some(b=>b.title===t.title);
-        rows+=`<tr><td><span class="chip p">${br}</span></td><td>${sem}</td><td>${t.code}</td><td>${t.title}</td><td>${isBuiltin?'<span class="chip bi">Built-in</span>':`<button class="del-btn" onclick="admDelTopic('${br}','${sem}','${i}')">Del</button>`}</td></tr>`;
+        const key=`${br}|${sem}|${t.title}`;
+        const isDeleted=(allData.deletedBuiltin?.topics||[]).includes(key);
+        if(isDeleted) return;
+        rows+=`<tr style="${isBuiltin?'background:rgba(225,29,72,0.03)':''}">
+          <td>${brChip(br)}</td><td>${sem}</td><td>${t.code}</td>
+          <td>${t.title}${isBuiltin?'<span class="chip bi" style="margin-left:6px;font-size:.65rem">built-in</span>':''}</td>
+          <td>${delBtn(`admDelTopic`,`'${br}','${sem}','${i}'`,isBuiltin)}</td>
+        </tr>`;
       });
     }
     tt.innerHTML=rows||noRow(5);
   }
+
   // Placement
   const plt=document.getElementById('pl-tbl');
-  if(plt) plt.innerHTML=(allData.placement||[]).map((p,i)=>`<tr><td><span class="chip g">${p.branch}</span></td><td>${p.title}</td><td><button class="del-btn" onclick="admDelPlacement(${i})">Del</button></td></tr>`).join('')||noRow(3);
+  if(plt) plt.innerHTML=(allData.placement||[]).map((p,i)=>`<tr><td>${brChip(p.branch)}</td><td>${p.title}</td><td><button class="del-btn" onclick="admDelPlacement(${i})">Del</button></td></tr>`).join('')||noRow(3);
+
   // YT
   const yt=document.getElementById('yt-tbl');
-  if(yt) yt.innerHTML=(allData.videos||[]).map((y,i)=>`<tr><td><span class="chip b">${y.branch}</span></td><td>${y.title}</td><td>${y.channel}</td><td><button class="del-btn" onclick="admDelYT(${i})">Del</button></td></tr>`).join('')||noRow(4);
+  if(yt) yt.innerHTML=(allData.videos||[]).map((y,i)=>`<tr><td>${brChip(y.branch)}</td><td>${y.title}</td><td>${y.channel}</td><td><button class="del-btn" onclick="admDelYT(${i})">Del</button></td></tr>`).join('')||noRow(4);
 }
 
 function noRow(c){ return `<tr><td colspan="${c}" style="color:var(--muted);text-align:center;padding:10px">Nothing added yet</td></tr>`; }
 
 // Admin add functions
 async function admAddSubject(){
-  const br=v('as-br'),sem=v('as-sem'),code=v('as-code'),name=v('as-name');
+  // Get selected branches
+  const selectedBranches = [...document.querySelectorAll('input[name="as-br"]:checked')].map(cb=>cb.value);
+  // Get selected sems
+  const selectedSems = [...document.querySelectorAll('input[name="as-sem"]:checked')].map(cb=>cb.value);
+  const code=v('as-code'),name=v('as-name');
   const unitsRaw=document.getElementById('as-units').value.trim();
-  if(!br||!code||!name){ showToast('❌ Fill required fields!','err'); return; }
+
+  if(!selectedBranches.length){ showToast('❌ Ek branch toh select karo!','err'); return; }
+  if(!selectedSems.length){ showToast('❌ Ek semester toh select karo!','err'); return; }
+  if(!name){ showToast('❌ Subject name required!','err'); return; }
+
   const units=unitsRaw.split('\n').filter(u=>u.trim()).map(line=>{
     const parts=line.split('|');
     const titlePart=parts[0].replace(/^Unit \d+:\s*/,'').trim();
@@ -4240,13 +4383,55 @@ async function admAddSubject(){
     return {num:0,title:titlePart,topics};
   });
   units.forEach((u,i)=>u.num=i+1);
-  if(!allData.syllabus[br]) allData.syllabus[br]={};
-  if(!allData.syllabus[br][sem]) allData.syllabus[br][sem]=[];
-  allData.syllabus[br][sem].push({code,name,units});
+
+  let count=0;
+  for(const br of selectedBranches){
+    for(const sem of selectedSems){
+      if(!allData.syllabus[br]) allData.syllabus[br]={};
+      if(!allData.syllabus[br][sem]) allData.syllabus[br][sem]=[];
+      // Avoid duplicate by code if code given
+      const subjectCode = code || (br.substring(0,1)+'S'+sem+'XX');
+      const exists = code ? allData.syllabus[br][sem].some(s=>s.code===subjectCode) : false;
+      if(!exists){
+        allData.syllabus[br][sem].push({code:subjectCode, name, units:JSON.parse(JSON.stringify(units))});
+        count++;
+      }
+    }
+  }
+
   await saveAdminData(); renderAdminTables(); renderSyllabus();
   ['as-code','as-name','as-units'].forEach(id=>document.getElementById(id).value='');
-  showToast('✅ Subject added!');
+  showToast(`✅ Subject added to ${count} branch-sem combination${count>1?'s':''}!`);
 }
+
+// Toggle all branches
+function toggleAllBr(){
+  const cbs=document.querySelectorAll('input[name="as-br"]');
+  const allChecked=[...cbs].every(c=>c.checked);
+  cbs.forEach(c=>c.checked=!allChecked);
+  updateBulkPreview();
+}
+// Toggle all sems
+function toggleAllSem(){
+  const cbs=document.querySelectorAll('input[name="as-sem"]');
+  const allChecked=[...cbs].every(c=>c.checked);
+  cbs.forEach(c=>c.checked=!allChecked);
+  updateBulkPreview();
+}
+// Live preview of selection
+function updateBulkPreview(){
+  const brs=[...document.querySelectorAll('input[name="as-br"]:checked')].map(c=>c.value);
+  const sems=[...document.querySelectorAll('input[name="as-sem"]:checked')].map(c=>'Sem '+c.value);
+  const preview=document.getElementById('as-bulk-preview');
+  if(!preview) return;
+  if(brs.length===0&&sems.length===0){preview.style.display='none';return;}
+  const total=brs.length*sems.length;
+  preview.style.display='block';
+  preview.innerHTML=`📌 Will add to: <b>${brs.join(', ')||'—'}</b> × <b>${sems.join(', ')||'—'}</b> = <b>${total} combination${total!==1?'s':''}</b>`;
+}
+window.toggleAllBr=toggleAllBr;
+window.toggleAllSem=toggleAllSem;
+window.updateBulkPreview=updateBulkPreview;
 
 async function admAddPYQ(){
   const br=v('ap-br'),sem=v('ap-sem'),code=v('ap-code'),yr=v('ap-yr');
@@ -4297,22 +4482,69 @@ async function admAddYT(){
   showToast('✅ Playlist added!');
 }
 
-// Admin delete
+// Admin delete — supports both custom and built-in data
 async function admDelSubject(br,sem,code){
-  if(!confirm('Delete this subject?')) return;
-  allData.syllabus[br][sem]=allData.syllabus[br][sem].filter(s=>s.code!==code);
-  await saveAdminData(); renderAdminTables(); renderSyllabus(); showToast('🗑️ Deleted!');
+  const isBuiltin=(builtinData.syllabus[br]?.[sem]||[]).some(b=>b.code===code);
+  const msg=isBuiltin
+    ? `"${code}" ek built-in subject hai.\n\nDelete karne par portal se permanently hata jayega.\n\nConfirm?`
+    : `Delete subject "${code}"?`;
+  if(!confirm(msg)) return;
+
+  // Remove from allData
+  if(allData.syllabus[br]?.[sem]){
+    allData.syllabus[br][sem]=allData.syllabus[br][sem].filter(s=>s.code!==code);
+  }
+  // If built-in, mark as deleted so it won't come back on reload
+  if(isBuiltin){
+    if(!allData.deletedBuiltin) allData.deletedBuiltin={};
+    if(!allData.deletedBuiltin.syllabus) allData.deletedBuiltin.syllabus=[];
+    const key=`${br}|${sem}|${code}`;
+    if(!allData.deletedBuiltin.syllabus.includes(key)) allData.deletedBuiltin.syllabus.push(key);
+  }
+  await saveAdminData(); renderAdminTables(); renderSyllabus();
+  showToast(isBuiltin?'🗑️ Built-in subject deleted!':'🗑️ Deleted!');
 }
+
 async function admDelPYQ(br,sem,code,yr){
-  if(!confirm('Delete this paper?')) return;
-  delete allData.pyq[br][sem][code].years[yr];
-  await saveAdminData(); renderAdminTables(); renderPYQ(); showToast('🗑️ Deleted!');
+  const isBuiltin=!!(builtinData.pyq[br]?.[sem]?.[code]);
+  const msg=isBuiltin
+    ? `Built-in PYQ paper "${code} — ${yr}" delete karna chahte ho?\n\nConfirm?`
+    : `Delete paper "${code} — ${yr}"?`;
+  if(!confirm(msg)) return;
+
+  if(allData.pyq[br]?.[sem]?.[code]?.years){
+    delete allData.pyq[br][sem][code].years[yr];
+  }
+  if(isBuiltin){
+    if(!allData.deletedBuiltin) allData.deletedBuiltin={};
+    if(!allData.deletedBuiltin.pyq) allData.deletedBuiltin.pyq=[];
+    const key=`${br}|${sem}|${code}|${yr}`;
+    if(!allData.deletedBuiltin.pyq.includes(key)) allData.deletedBuiltin.pyq.push(key);
+  }
+  await saveAdminData(); renderAdminTables(); renderPYQ();
+  showToast(isBuiltin?'🗑️ Built-in PYQ deleted!':'🗑️ Deleted!');
 }
+
 async function admDelTopic(br,sem,i){
-  if(!confirm('Delete this topic?')) return;
+  const t=(allData.topics[br]?.[sem]||[])[i];
+  if(!t){ showToast('❌ Topic not found','err'); return; }
+  const isBuiltin=(builtinData.topics[br]?.[sem]||[]).some(b=>b.title===t.title);
+  const msg=isBuiltin
+    ? `Built-in topic "${t.title}" delete karna chahte ho?\n\nConfirm?`
+    : `Delete topic "${t.title}"?`;
+  if(!confirm(msg)) return;
+
+  if(isBuiltin){
+    if(!allData.deletedBuiltin) allData.deletedBuiltin={};
+    if(!allData.deletedBuiltin.topics) allData.deletedBuiltin.topics=[];
+    const key=`${br}|${sem}|${t.title}`;
+    if(!allData.deletedBuiltin.topics.includes(key)) allData.deletedBuiltin.topics.push(key);
+  }
   allData.topics[br][sem].splice(i,1);
-  await saveAdminData(); renderAdminTables(); renderTopics(); showToast('🗑️ Deleted!');
+  await saveAdminData(); renderAdminTables(); renderTopics();
+  showToast(isBuiltin?'🗑️ Built-in topic deleted!':'🗑️ Deleted!');
 }
+
 async function admDelPlacement(i){
   if(!confirm('Delete?')) return;
   allData.placement.splice(i,1);
@@ -4395,6 +4627,14 @@ window.addTask = addTask;
 window.admAddPYQ = admAddPYQ;
 window.admAddPlacement = admAddPlacement;
 window.admAddSubject = admAddSubject;
+
+// Attach live preview listeners after DOM ready
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('input[name="as-br"], input[name="as-sem"]').forEach(cb=>{
+    cb.addEventListener('change', updateBulkPreview);
+  });
+  updateBulkPreview();
+});
 window.admAddTopic = admAddTopic;
 window.admAddYT = admAddYT;
 window.admDelPYQ = admDelPYQ;
